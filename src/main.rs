@@ -25,6 +25,8 @@ fn main() -> Result<(), String> {
         canvas: canvas,
         texture: texture_context,
         font: font,
+        waiting: true,
+        frame: 0,
     };
 
     let texture_binding = context.canvas.texture_creator();
@@ -46,6 +48,9 @@ fn main() -> Result<(), String> {
             match event {
                 Event::Quit { .. } | Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     return Ok(());
+                },
+                Event::KeyDown { keycode: Some(Keycode::Return), ..} => {
+                    context.waiting = false;
                 },
                 _ => {}
             }

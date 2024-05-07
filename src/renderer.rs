@@ -13,6 +13,8 @@ pub struct RenderContext<'a> {
     pub canvas: Canvas<Window>,
     pub texture: TextureCreator<WindowContext>,
     pub font: Font<'a, 'a>,
+    pub waiting: bool,
+    pub frame: u64,
 }
 
 pub struct RenderTextures<'a> {
@@ -52,6 +54,14 @@ pub fn render(context: &mut RenderContext,  dancers: &mut Vec<dancers::Dancer>, 
     }
 
     debug_text(context, &delta_time_string, Point::new(5, 5));
+
+    let width = (500.0 + (context.frame as f64 / 200.0).sin() * 50.0) as u32;
+    let height = (50.0 + (context.frame as f64 / 200.0).sin() * 10.0) as u32;
+
+    if context.waiting {
+        render_outlined_text(context, "PRESS ENTER TO START", Rect::new(512 - (width as i32 / 2), 300 - (height as i32 / 2), width, height), 3, Color::RGBA(255, 255, 255, 255), Color::RGBA(12, 12, 12, 255)).unwrap();
+    }
+    context.frame += 1;
 }
 
 pub fn text(context: &mut RenderContext, string: &str, target: Rect, color: Color) -> Result<(), String> {
