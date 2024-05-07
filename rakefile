@@ -1,0 +1,16 @@
+require 'rake/clean'
+CLEAN << "release"
+
+task build: :clean do
+    sh "cargo build --release"
+    unless File.directory?("release")
+        FileUtils.mkdir_p("release")
+    end
+
+    FileUtils.copy_entry("assets", "release/assets")
+    FileUtils.copy_entry("lib", "release")
+    FileUtils.cp("target/release/rafflen.exe", "release/rafflen.exe")
+    FileUtils.rm_rf("release/assets/icon.ico")
+end
+
+task default: :build
